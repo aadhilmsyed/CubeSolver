@@ -1,0 +1,5 @@
+/Users/aadhilmsyed839/Documents/Documents - Aadhil’s MacBook Air/CubeSolver/build/CMakeFiles/RubiksCube.dir
+/Users/aadhilmsyed839/Documents/Documents - Aadhil’s MacBook Air/CubeSolver/build/CMakeFiles/edit_cache.dir
+/Users/aadhilmsyed839/Documents/Documents - Aadhil’s MacBook Air/CubeSolver/build/CMakeFiles/rebuild_cache.dir
+/Users/aadhilmsyed839/Documents/Documents - Aadhil’s MacBook Air/CubeSolver/build/CMakeFiles/RubiksCube_autogen_timestamp_deps.dir
+/Users/aadhilmsyed839/Documents/Documents - Aadhil’s MacBook Air/CubeSolver/build/CMakeFiles/RubiksCube_autogen.dir
