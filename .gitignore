@@ -52,6 +52,7 @@ _deps/
 ParseCache.txt
 compiler_depend.internal
 compiler_depend.make
+Makefile2
 
 # macOS specific
 .DS_Store
