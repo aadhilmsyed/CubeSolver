@@ -22,41 +22,128 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 void MainWindow::createControls() {
     controlLayout = new QHBoxLayout();
     
-    // Create move buttons
+    // Create main button container
+    QVBoxLayout* buttonContainer = new QVBoxLayout();
+    
+    // Create move buttons grid (3x6)
     QGridLayout* moveButtonLayout = new QGridLayout();
-    QStringList moves = {
-        "F", "B", "L", "R", "U", "D",
-        "F'", "B'", "L'", "R'", "U'", "D'",
-        "F2", "B2", "L2", "R2", "U2", "D2"
+    moveButtonLayout->setSpacing(5);  // Add some spacing between buttons
+    
+    // Define move groups with their colors
+    struct MoveGroup {
+        QString move;
+        QString color;
+        QString textColor;
     };
     
-    int row = 0;
-    int col = 0;
-    for (const auto& move : moves) {
-        QPushButton* button = new QPushButton(move);
-        button->setFixedSize(40, 40);
-        connect(button, &QPushButton::clicked, this, &MainWindow::handleTurn);
-        moveButtonLayout->addWidget(button, row, col);
-        
-        col++;
-        if (col >= 6) {
-            col = 0;
-            row++;
+    QVector<MoveGroup> moveGroups = {
+        {"F", "#4CAF50", "white"},   // Green
+        {"B", "#2196F3", "white"},   // Blue
+        {"L", "#FF9800", "black"},   // Orange
+        {"R", "#f44336", "white"},   // Red
+        {"U", "#FFFFFF", "black"},   // White
+        {"D", "#FFEB3B", "black"}    // Yellow
+    };
+    
+    // Create buttons in a 3x6 grid
+    // Row 0: Regular moves (F, B, L, R, U, D)
+    // Row 1: Prime moves (F', B', L', R', U', D')
+    // Row 2: Double moves (F2, B2, L2, R2, U2, D2)
+    
+    const QStringList moveTypes = {"", "'", "2"};
+    
+    for (int row = 0; row < 3; row++) {
+        for (int col = 0; col < 6; col++) {
+            QString moveText = moveGroups[col].move + moveTypes[row];
+            QPushButton* button = new QPushButton(moveText);
+            button->setFixedSize(50, 50);
+            
+            // Style the button
+            QString style = QString(
+                "QPushButton {"
+                "   background-color: %1;"
+                "   color: %2;"
+                "   border: 2px solid #666666;"
+                "   border-radius: 5px;"
+                "   font-weight: bold;"
+                "}"
+                "QPushButton:hover {"
+                "   background-color: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+                "                                     stop: 0 %1, stop: 1 #666666);"
+                "}"
+                "QPushButton:pressed {"
+                "   background-color: #666666;"
+                "}"
+            ).arg(moveGroups[col].color, moveGroups[col].textColor);
+            
+            button->setStyleSheet(style);
+            connect(button, &QPushButton::clicked, this, &MainWindow::handleTurn);
+            moveButtonLayout->addWidget(button, row, col);
         }
     }
     
+    // Create control buttons layout (1x2 grid)
+    QGridLayout* controlButtonsLayout = new QGridLayout();
+    controlButtonsLayout->setSpacing(5);
+    
     // Create scramble button
     QPushButton* scrambleButton = new QPushButton("Scramble");
+    scrambleButton->setFixedHeight(50);
+    scrambleButton->setStyleSheet(
+        "QPushButton {"
+        "   background-color: #9C27B0;"
+        "   color: white;"
+        "   border: 2px solid #666666;"
+        "   border-radius: 5px;"
+        "   font-weight: bold;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+        "                                     stop: 0 #9C27B0, stop: 1 #666666);"
+        "}"
+        "QPushButton:pressed {"
+        "   background-color: #666666;"
+        "}"
+    );
     connect(scrambleButton, &QPushButton::clicked, this, &MainWindow::handleScramble);
     
-    // Add layouts to main layout
-    QVBoxLayout* buttonLayout = new QVBoxLayout();
-    buttonLayout->addLayout(moveButtonLayout);
-    buttonLayout->addWidget(scrambleButton);
+    // Create reset button
+    QPushButton* resetButton = new QPushButton("Reset");
+    resetButton->setFixedHeight(50);
+    resetButton->setStyleSheet(
+        "QPushButton {"
+        "   background-color: #607D8B;"
+        "   color: white;"
+        "   border: 2px solid #666666;"
+        "   border-radius: 5px;"
+        "   font-weight: bold;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+        "                                     stop: 0 #607D8B, stop: 1 #666666);"
+        "}"
+        "QPushButton:pressed {"
+        "   background-color: #666666;"
+        "}"
+    );
+    connect(resetButton, &QPushButton::clicked, this, &MainWindow::handleReset);
     
-    // Add some spacing and make controls stay on the right
-    mainLayout->addLayout(buttonLayout);
-    mainLayout->setAlignment(buttonLayout, Qt::AlignRight);
+    // Add control buttons to the grid
+    controlButtonsLayout->addWidget(scrambleButton, 0, 0);
+    controlButtonsLayout->addWidget(resetButton, 0, 1);
+    
+    // Make control buttons take equal space
+    controlButtonsLayout->setColumnStretch(0, 1);
+    controlButtonsLayout->setColumnStretch(1, 1);
+    
+    // Add layouts to main container
+    buttonContainer->addLayout(moveButtonLayout);
+    buttonContainer->addSpacing(10);
+    buttonContainer->addLayout(controlButtonsLayout);
+    
+    // Add button container to main layout
+    mainLayout->addLayout(buttonContainer);
+    mainLayout->setAlignment(buttonContainer, Qt::AlignRight);
 }
 
 void MainWindow::handleTurn() {
@@ -88,5 +175,10 @@ void MainWindow::handleTurn() {
 
 void MainWindow::handleScramble() {
     cube.scramble();
+    cubeRenderer->update();
+}
+
+void MainWindow::handleReset() {
+    cube.reset();
     cubeRenderer->update();
 } 

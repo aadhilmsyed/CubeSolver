@@ -53,6 +53,7 @@ public:
     bool setState(const std::string& state);
     void undo();
     void redo();
+    void reset();
     
 private:
     // Each face is represented as a 3x3 grid

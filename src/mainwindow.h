@@ -17,6 +17,7 @@ public:
 private slots:
     void handleTurn();
     void handleScramble();
+    void handleReset();
 
 private:
     Cube cube;

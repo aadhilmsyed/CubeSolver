@@ -457,4 +457,22 @@ void Cube::rotateFaceCounterClockwise(Face face) {
     f[3] = temp[1];
 }
 
+void Cube::reset() {
+    // Reset to initial solved state
+    const Color centerColors[6] = {
+        Color::GREEN,   // Front (0)
+        Color::BLUE,    // Back  (1)
+        Color::ORANGE,  // Left  (2)
+        Color::RED,     // Right (3)
+        Color::WHITE,   // Up    (4)
+        Color::YELLOW   // Down  (5)
+    };
+    
+    for (int face = 0; face < 6; face++) {
+        for (int i = 0; i < 9; i++) {
+            faces[face][i] = centerColors[face];
+        }
+    }
+}
+
 // Implement other moves (B, L, R, U, D and their variants) similarly... 
