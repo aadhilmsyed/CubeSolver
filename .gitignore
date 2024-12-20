@@ -48,6 +48,10 @@ CTestTestfile.cmake
 _deps/
 *.cmake
 !CMakeLists.txt
+*_autogen*
+ParseCache.txt
+compiler_depend.internal
+compiler_depend.make
 
 # macOS specific
 .DS_Store
